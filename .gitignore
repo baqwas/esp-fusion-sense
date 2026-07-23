@@ -3,6 +3,7 @@
 # ==========================================
 # Ignore the actual configuration file containing private data
 config.toml
+secrets.h
 
 # (Note: config.toml.example is intentionally NOT listed here
 # so that Git tracks it and uploads it for your students)
