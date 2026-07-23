@@ -1,0 +1,40 @@
+# ==========================================
+# Credentials & Configuration
+# ==========================================
+# Ignore the actual configuration file containing private data
+config.toml
+
+# (Note: config.toml.example is intentionally NOT listed here
+# so that Git tracks it and uploads it for your students)
+
+# ==========================================
+# PlatformIO Core / Build Artifacts
+# ==========================================
+.pio/
+lib/*/examples/
+lib/*/test/
+
+# ==========================================
+# CLion / JetBrains IDE Specifics
+# ==========================================
+.idea/
+cmake-build-*/
+CMakeListsPrivate.txt
+*.iml
+
+# ==========================================
+# Compiled Object Files & Logs
+# ==========================================
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+*.log
+
+# ==========================================
+# Linux System / Temp Files
+# ==========================================
+*~
+.fuse_hidden*
+.directory
