@@ -13,6 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 0: Run locally
+      - name: Run Pre-commit
+        uses: pre-commit/action@v3.0.0
+
       # Step 1: Check out the repository code
       - name: Checkout Code
         uses: actions/checkout@v4

@@ -1,0 +1,58 @@
+# ==============================================================================
+# Pre-Commit Configuration File (.pre-commit-config.yaml)
+# Project: C++ Embedded / Robotics Infrastructure (CLion / Ubuntu)
+# ==============================================================================
+#
+# VERSION HISTORY & CHANGE LOG:
+# ------------------------------------------------------------------------------
+# v1.2.0 (2026-05-18) - Added Gitleaks secret scanning hook for SOHO cluster keys.
+# v1.1.0 (2025-11-20) - Integrated clang-format hook for C++ code style enforcement.
+# v1.0.0 (2025-08-10) - Initial baseline setup with trailing-whitespace & end-of-file.
+# ==============================================================================
+
+repos:
+  # -----------------------------------------------------------------
+  # Basic File & Formatting Hygiene Hooks
+  # -----------------------------------------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0  # Stable release ensuring robust cross-platform compatibility on Ubuntu
+    hooks:
+      # Prevents commit if trailing whitespaces are found in C++ source/header files
+      - id: trailing-whitespace
+
+      # Ensures every source and build file ends with a proper newline character
+      - id: end-of-file-fixer
+
+      # Catches accidentally committed large files (exceeding 500kb limit)
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+
+      # Validates syntax consistency for JSON configuration files
+      - id: check-json
+
+      # Validates syntax consistency for YAML configuration files
+      - id: check-yaml
+
+  # -----------------------------------------------------------------
+  # Security & Secret Scanning Hook
+  # -----------------------------------------------------------------
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2  # High-performance engine for catching exposed keys and passwords
+    hooks:
+      - id: gitleaks
+        name: Gitleaks Secret Detection
+        description: Prevents accidental credential leaks (SSH keys, API tokens) before commit.
+
+  # -----------------------------------------------------------------
+  # C++ Code Style & Formatting Hook (Clang-Format)
+  # -----------------------------------------------------------------
+  - repo: https://github.com/pocc/pre-commit-hooks
+    rev: v1.3.5  # Official pre-commit wrapper for Clang-Format and Clang-Tidy
+    hooks:
+      - id: clang-format
+        name: Clang-Format C++ Linter
+        language: system
+        entry: clang-format
+        description: Automatically formats C++ source and header files to match project style guidelines.
+        args: ['--style=file']  # Uses the .clang-format configuration located in the project root
+        files: \.(cpp|cc|cxx|h|hpp)$
