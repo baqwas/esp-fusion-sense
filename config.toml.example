@@ -1,0 +1,13 @@
+[device]
+id = "soho-node-01"
+environment = "production_c6"
+debug_level = 3
+
+[network]
+ssid = "MyFarm"
+hostname = "esp32-c6-01"
+
+[sensors]
+i2c_sda = 6
+i2c_scl = 7
+poll_interval_ms = 10
