@@ -38,6 +38,16 @@ jobs:
       - name: Generate Dummy config.toml
         run: cp config.toml.example config.toml
 
-      # Step 6: Execute the build process
+      # Step 6: Dynamically generate secrets.h from secure repository secrets
+      - name: Generate Secrets File
+        run: |
+          mkdir -p include
+          echo "#ifndef SECRETS_H" > include/secrets.h
+          echo "#define SECRETS_H" >> include/secrets.h
+          echo "#define WIFI_SSID \"${{ secrets.WIFI_SSID }}\"" >> include/secrets.h
+          echo "#define WIFI_PASSWORD \"${{ secrets.WIFI_PASSWORD }}\"" >> include/secrets.h
+          echo "#endif" >> include/secrets.h
+
+      # Step 7: Execute the build process
       - name: Run PlatformIO Build
         run: pio run
