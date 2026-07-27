@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Advanced ESP32-C6 Firmware integration and multi-sensor telemetry processing suite for DFRobot C4002, ENS160, and BME280 peripherals.
  * @author Reza
- * @version 1.2.1
+ * @version 1.2.2
  * @date 2026-07-27
  *
  * @copyright Copyright (c) 2026 Reza. All rights reserved.
@@ -30,7 +30,8 @@
  *   - v1.0.0 (2026-05-14): Initial architecture framework design for SOHO environmental nodes.
  *   - v1.1.0 (2026-06-20): Integrated localized static timing overrides and sensor warm-up loops.
  *   - v1.2.0 (2026-07-27): Refactored DFRobot C4002 constructor bindings, hardware serial pin assignments, and CI pipeline secrets integration.
- *   - v1.2.1 (2026-07-27): Corrected DFRobot_BME280_IIC class type, resolved ENS160 I2C explicit address binding (0x53), and aligned C4002 promptResult() telemetry fetch call.
+ *   - v1.2.1 (2026-07-27): Corrected DFRobot_BME280_IIC class type, resolved ENS160 I2C explicit address binding (0x53).
+ *   - v1.2.2 (2026-07-27): Aligned C4002 API calls with native getNoteInfo(), getTargetState(), and getPresenceTargetInfo() library methods.
  *
  * @prerequisites
  *   - Hardware: Espressif ESP32-C6-DevKitC-1 microcontroller, DFRobot C4002 mmWave Radar sensor, ENS160 Air Quality sensor, and BME280 Environmental sensor.
@@ -50,10 +51,11 @@
  *   1. System Initialization: Configure global logging console, hardware serial interface (UART1) for radar communication, and the primary I2C bus (`Wire`).
  *   2. Peripheral Probing: Execute synchronous polling loops to verify hardware responsiveness for the C4002 radar, ENS160 air quality monitor (configured to standard power mode), and BME280 atmospheric sensor.
  *   3. Telemetry Acquisition Loop:
- *      - Query the C4002 radar module via `promptResult()` to retrieve target presence metrics.
- *      - Extract target state (`targetState`) and presence distance (`presenceDis`) parameters from the returned `sRetResult_t` structure.
- *      - Output formatted strings over the primary serial debugging interface.
- *      - Enforce a static 500ms delay between sampling cycles to maintain bus stability.
+ *      - Execute `c4002.getNoteInfo()` to service the incoming packet buffer.
+ *      - Retrieve target detection state via `c4002.getTargetState()`.
+ *      - Extract stationary presence details (distance, energy) via `c4002.getPresenceTargetInfo()`.
+ *      - Output formatted telemetry strings over primary debugging UART.
+ *      - Enforce a static 500ms delay between sampling cycles.
  *
  * @references
  *   - Espressif ESP32-C6 Technical Reference Manual & Datasheet
@@ -109,12 +111,19 @@ void setup() {
 }
 
 void loop() {
-    sRetResult_t radarData = c4002.promptResult();
+    // Process internal packet buffer from C4002 sensor
+    sRetResult_t retResult = c4002.getNoteInfo();
+    (void)retResult;
+
+    // Retrieve target state and presence telemetry
+    eTargetState_t targetState = c4002.getTargetState();
+    sPresenceTarget_t presenceInfo = c4002.getPresenceTargetInfo();
 
     Serial.print("Target State: ");
-    Serial.print(radarData.targetState);
+    Serial.print(static_cast<int>(targetState));
     Serial.print(" | Presence Distance: ");
-    Serial.println(radarData.presenceDis);
+    Serial.print(presenceInfo.distance);
+    Serial.println(" m");
 
     delay(500);
 }
