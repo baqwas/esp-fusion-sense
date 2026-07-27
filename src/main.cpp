@@ -1,8 +1,8 @@
 /**
  * @file main.cpp
- * @brief Basic ESP32-C6 Firmware integration and multi-sensor telemetry processing suite for DFRobot C4002, ENS160, and BME280 peripherals.
- * @author Matha Goram
- * @version 1.2.0
+ * @brief Advanced ESP32-C6 Firmware integration and multi-sensor telemetry processing suite for DFRobot C4002, ENS160, and BME280 peripherals.
+ * @author Reza
+ * @version 1.2.1
  * @date 2026-07-27
  *
  * @copyright Copyright (c) 2026 Reza. All rights reserved.
@@ -30,6 +30,7 @@
  *   - v1.0.0 (2026-05-14): Initial architecture framework design for SOHO environmental nodes.
  *   - v1.1.0 (2026-06-20): Integrated localized static timing overrides and sensor warm-up loops.
  *   - v1.2.0 (2026-07-27): Refactored DFRobot C4002 constructor bindings, hardware serial pin assignments, and CI pipeline secrets integration.
+ *   - v1.2.1 (2026-07-27): Corrected DFRobot_BME280_IIC class type, resolved ENS160 I2C explicit address binding (0x53), and aligned C4002 promptResult() telemetry fetch call.
  *
  * @prerequisites
  *   - Hardware: Espressif ESP32-C6-DevKitC-1 microcontroller, DFRobot C4002 mmWave Radar sensor, ENS160 Air Quality sensor, and BME280 Environmental sensor.
@@ -49,8 +50,8 @@
  *   1. System Initialization: Configure global logging console, hardware serial interface (UART1) for radar communication, and the primary I2C bus (`Wire`).
  *   2. Peripheral Probing: Execute synchronous polling loops to verify hardware responsiveness for the C4002 radar, ENS160 air quality monitor (configured to standard power mode), and BME280 atmospheric sensor.
  *   3. Telemetry Acquisition Loop:
- *      - Query the C4002 radar module via `getRadarData()` to retrieve target presence metrics.
- *      - Extract target state and presence distance parameters from the structured return type.
+ *      - Query the C4002 radar module via `promptResult()` to retrieve target presence metrics.
+ *      - Extract target state (`targetState`) and presence distance (`presenceDis`) parameters from the returned `sRetResult_t` structure.
  *      - Output formatted strings over the primary serial debugging interface.
  *      - Enforce a static 500ms delay between sampling cycles to maintain bus stability.
  *
@@ -80,8 +81,8 @@ constexpr uint8_t C4002_TX_PIN = 3;
  * @brief Instantiate sensor drivers with proper parameters and pin bindings
  */
 DFRobot_C4002 c4002(&Serial1, 115200, C4002_RX_PIN, C4002_TX_PIN);
-DFRobot_ENS160_I2C ens160(&Wire, ENS160_I2C_ADDR_0);
-DFRobot_BME280_I2C bme280(&Wire, 0x77);
+DFRobot_ENS160_I2C ens160(&Wire, 0x53);
+DFRobot_BME280_IIC bme280(&Wire, 0x77);
 
 void setup() {
     Serial.begin(115200);
@@ -108,7 +109,7 @@ void setup() {
 }
 
 void loop() {
-    sRetResult_t radarData = c4002.getRadarData();
+    sRetResult_t radarData = c4002.promptResult();
 
     Serial.print("Target State: ");
     Serial.print(radarData.targetState);
