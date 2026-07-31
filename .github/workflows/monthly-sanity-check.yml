@@ -1,0 +1,43 @@
+# ==============================================================================
+# File: monthly-sanity-check.yml
+# Workflow: Monthly Sanity Check
+# Version: 1.0.0
+# Last Updated: 2026-07-30
+# Purpose: Executes tests automatically on the first day of every month to
+#          ensure that upstream dependency or OS updates have not quietly
+#          broken the project during periods of inactivity.
+# Triggers:
+#   - Cron schedule (00:00 UTC on the 1st of every month)
+#   - Manual triggering via GitHub Actions web interface
+# ==============================================================================
+
+name: Monthly Sanity Check
+
+on:
+  schedule:
+    # Runs at midnight UTC on the 1st day of every month
+    - cron: '0 0 1 * *'
+
+  # Allows you to trigger this workflow manually from GitHub's Actions tab
+  workflow_dispatch:
+
+jobs:
+  sanity-test:
+    name: Monthly Integrity Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
