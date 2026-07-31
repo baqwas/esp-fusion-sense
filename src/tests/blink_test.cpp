@@ -75,6 +75,7 @@
 #ifndef LED_BUILTIN
 #define LED_BUILTIN 15
 #endif
+#define LED_BUILTIN 15
 
 /**
  * @brief Hardware initialization and peripheral provisioning routine.

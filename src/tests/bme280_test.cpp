@@ -1,10 +1,10 @@
 /**
  * @file bme280_test.cpp
- * @author ParkCircus Products Engineering Team
- * @version 1.0.0
- * @date 2026-07-23
+ * @author Matha Goram
+ * @version 1.0.2
+ * @date 2026-07-31
  *
- * @copyright Copyright (c) 2026 ParkCircus Products. All Rights Reserved.
+ * @copyright Copyright (c) 2026 ParkCircus Productions. All Rights Reserved.
  *
  * @license MIT License
  *
@@ -50,6 +50,8 @@
 
 /**
  * @page doc_history 2. Update History
+ * @version 1.0.2 | 2026-07-31 | Updated I2C pin mapping to GPIO 19/20 and address to 0x76 for Fermion breakout.
+ * @version 1.0.1 | 2026-07-30 | Updated class instantiation to match DFRobot_BME280_IIC naming convention.
  * @version 1.0.0 | 2026-07-23 | Initial production release for BME280 environmental validation.
  */
 
@@ -57,8 +59,8 @@
  * @page doc_prereq 3. Prerequisites & Hardware Requirements
  * @hardware
  * - Controller: FireBeetle 2 ESP32-C6 core board.
- * - Sensor: DFRobot BME280 Meteorological Sensor.
- * - Wiring: Connect sensor SDA to ESP32 I2C SDA (GPIO 6), SCL to SCL (GPIO 7), VCC to 3.3V, and GND to GND.
+ * - Sensor: DFRobot BME280 Meteorological Sensor (Fermion combo board).
+ * - Wiring: Connect sensor SDA to ESP32 I2C SDA (GPIO 19), SCL to SCL (GPIO 20), VCC to 3.3V, and GND to GND.
  *
  * @software
  * - Development Environment: JetBrains CLion with PlatformIO plugin.
@@ -77,8 +79,8 @@
  * @workflow
  * 1. Initialization Phase (`setup()`):
  *    - Starts serial communication channel at 115,200 baud.
- *    - Initializes Wire (I2C) interface mapped to ESP32-C6 default pins.
- *    - Verifies BME280 sensor presence and configures baseline parameters.
+ *    - Initializes Wire (I2C) interface explicitly mapped to ESP32-C6 pins 19 (SDA) and 20 (SCL).
+ *    - Verifies BME280 sensor presence at address 0x76 and configures baseline parameters.
  * 2. Execution Loop (`loop()`):
  *    - Measures ambient temperature, humidity, and barometric pressure from the BME280.
  *    - Outputs consolidated telemetry packet to the serial monitor.
@@ -89,8 +91,8 @@
  * @page doc_errors 6. Error Message Responses & Troubleshooting
  * @errors
  * - Symptom: Serial monitor displays initialization failure warnings for BME280.
- *   - Cause: I2C address conflict, loose wiring, or missing pull-up resistors on SDA/SCL lines.
- *   - Resolution: Check that GPIO 6 (SDA) and GPIO 7 (SCL) connections are secure and verify power input is stable.
+ *   - Cause: I2C address mismatch, loose wiring, or missing pull-up resistors on SDA/SCL lines.
+ *   - Resolution: Check that GPIO 19 (SDA) and GPIO 20 (SCL) connections are secure and verify address 0x76.
  * - Symptom: Build fails due to missing library headers (`DFRobot_BME280.h`).
  *   - Cause: Required library dependencies are not declared in `lib_deps` within `platformio.ini`.
  *   - Resolution: Add the appropriate DFRobot library reference to your project build configuration.
@@ -106,8 +108,8 @@
 #include <Wire.h>
 #include <DFRobot_BME280.h>
 
-// Instantiate sensor object
-DFRobot_BME280_I2C bme280(&Wire, 0x77); // Default BME280 I2C address is usually 0x77 (or 0x76)
+// Instantiate sensor object using address 0x76 for the Fermion combo board
+DFRobot_BME280_IIC bme280(&Wire, 0x76);
 
 void setup() {
     // Initialize host debugging serial monitor
@@ -116,8 +118,10 @@ void setup() {
 
     Serial.println("\n[INIT] Initializing DFRobot BME280 Meteorological Sensor...");
 
-    // Initialize I2C bus for ESP32-C6 (GPIO 6 = SDA, GPIO 7 = SCL)
-    Wire.begin(6, 7);
+    // Initialize I2C bus explicitly for ESP32-C6 Fermion wiring (GPIO 19 = SDA, GPIO 20 = SCL)
+    Wire.begin(19, 20);
+    Wire.setClock(100000); // Set standard 100kHz I2C clock for stability
+    delay(200);            // Allow I2C bus state machine to stabilize
 
     // Initialize BME280 Meteorological Sensor
     while (bme280.begin() != 0) {

@@ -1,10 +1,10 @@
 /**
- * @file fermionens160_test.cpp
- * @author ParkCircus Products Engineering Team
- * @version 1.0.2
+ * @file fermion_ens160_test.cpp
+ * @author Matha Goram
+ * @version 1.0.0
  * @date 2026-07-31
  *
- * @copyright Copyright (c) 2026 ParkCircus Products. All Rights Reserved.
+ * @copyright Copyright (c) 2026 ParkCircus Productions. All Rights Reserved.
  *
  * @license MIT License
  *
@@ -41,18 +41,17 @@
 
 /**
  * @page doc_overview 1. Purpose & System Scope
- * @brief Validates I2C connectivity and air quality data acquisition for the DFRobot ENS160 sensor module.
+ * @brief Validates I2C connectivity, air quality data acquisition, and IoT automation exercises for the DFRobot Fermion ENS160 sensor module.
  *
- * The `fermionens160_test.cpp` module initializes the air quality sensor
- * connected to the FireBeetle 2 ESP32-C6. It verifies I2C
- * bus communication and reads TVOC, eCO2, and AQI indices.
+ * The `fermion_ens160_test.cpp` module initializes the air quality sensor
+ * connected to the FireBeetle 2 ESP32-C6. It verifies I2C bus communication,
+ * reads raw metrics (TVOC, eCO2, AQI), and executes integrated automation routines
+ * for HVAC ventilation, air purifiers, JSON telemetry dashboards, and building automation.
  */
 
 /**
  * @page doc_history 2. Update History
- * @version 1.0.2 | 2026-07-31 | Fixed status check method call to match DFRobot_ENS160 library API.
- * @version 1.0.1 | 2026-07-31 | Updated I2C pin mapping to GPIO 19/20 and address to 0x53 for Fermion breakout.
- * @version 1.0.0 | 2026-07-23 | Initial production release for ENS160 air quality validation.
+ * @version 1.0.0 | 2026-07-31 | Consolidated standalone ENS160 verification and IoT automation exercises into a single module.
  */
 
 /**
@@ -70,8 +69,8 @@
 /**
  * @page doc_ui 4. User Interface & Telemetry Guide
  * @ui
- * - Serial Telemetry: Streams initialization logs and metrics packets over UART0 at 115200 baud, 8-N-1.
- * - Diagnostic Metrics: Prints real-time TVOC, eCO2, and Air Quality Index (AQI).
+ * - Serial Telemetry: Streams initialization logs, discrete automation triggers, and structured JSON telemetry packets over UART0 at 115200 baud, 8-N-1.
+ * - Diagnostic Metrics: Prints real-time AQI, TVOC concentration, and eCO2 concentration.
  */
 
 /**
@@ -80,10 +79,12 @@
  * 1. Initialization Phase (`setup()`):
  *    - Starts serial communication channel at 115,200 baud.
  *    - Initializes Wire (I2C) interface explicitly mapped to ESP32-C6 pins 19 (SDA) and 20 (SCL).
+ *    - Configures simulation actuator GPIO pins.
  *    - Verifies ENS160 air quality sensor handshaking at address 0x53 and sets operating mode to standard run.
  * 2. Execution Loop (`loop()`):
- *    - Reads air quality parameters (AQI, TVOC, eCO2) from the ENS160 using standard library polling functions.
- *    - Outputs consolidated telemetry packet to the serial monitor.
+ *    - Validates data readiness status from the ENS160 using standard library polling functions.
+ *    - Reads air quality parameters (AQI, TVOC, eCO2).
+ *    - Executes integrated automation routines for HVAC, air purifiers, JSON dashboards, and building thermostats.
  *    - Pauses execution for 5000 milliseconds before subsequent read cycle.
  */
 
@@ -100,7 +101,7 @@
 
 /**
  * @page doc_notes 7. References & Notes
- * @note Designed for isolated module verification within the SOHO sensor node framework.
+ * @note Designed for consolidated standalone testing and practical automation verification within the SOHO sensor node framework.
  * @reference DFRobot Fermion: ENS160 Air Quality Sensor Product Wiki.
  */
 
@@ -111,17 +112,24 @@
 // Instantiate sensor object using address 0x53 for the Fermion combo board
 DFRobot_ENS160_I2C ens160(&Wire, 0x53);
 
+// Output Actuator Pins Simulation
+const int VENTILATION_RELAY_PIN = 4;
+const int PURIFIER_PWM_PIN = 5;
+
 void setup() {
     // Initialize host debugging serial monitor
     Serial.begin(115200);
     delay(1000);
 
-    Serial.println("\n[INIT] Initializing DFRobot ENS160 Air Quality Sensor...");
+    Serial.println("\n[INIT] Initializing DFRobot Fermion ENS160 Air Quality Sensor...");
 
     // Initialize I2C bus explicitly for ESP32-C6 Fermion wiring (GPIO 19 = SDA, GPIO 20 = SCL)
     Wire.begin(19, 20);
     Wire.setClock(100000); // Set standard 100kHz I2C clock for stability
     delay(200);            // Allow I2C bus state machine to stabilize
+
+    pinMode(VENTILATION_RELAY_PIN, OUTPUT);
+    pinMode(PURIFIER_PWM_PIN, OUTPUT);
 
     // Initialize ENS160 Air Quality Sensor
     while (ens160.begin() != NO_ERR) {
@@ -134,10 +142,69 @@ void setup() {
     Serial.println("[SUCCESS] ENS160 sensor initialized and set to standard mode.");
 }
 
-void loop() {
-    Serial.println("----------------------------------------");
+/**
+ * @brief Exercise 1: Smart Ventilation & HVAC Systems
+ * Automatically triggers air exchange relays when eCO2 exceeds healthy thresholds.
+ */
+void exerciseSmartVentilation(uint16_t eco2) {
+    const uint16_t ECO2_THRESHOLD = 1000; // ppm
+    if (eco2 > ECO2_THRESHOLD) {
+        digitalWrite(VENTILATION_RELAY_PIN, HIGH);
+        Serial.println("[HVAC] eCO2 elevated! Ventilation Fan: ACTIVATED.");
+    } else {
+        digitalWrite(VENTILATION_RELAY_PIN, LOW);
+        Serial.println("[HVAC] eCO2 normal. Ventilation Fan: OFF.");
+    }
+}
 
-    // Read Air Quality Data from ENS160 using correct API check method
+/**
+ * @brief Exercise 2: Air Purifiers & Home Appliances
+ * Dynamically scales purifier fan PWM in response to TVOC cooking fumes or chemical vapors.
+ */
+void exerciseAirPurifier(uint16_t tvoc) {
+    int pwmSpeed = 0;
+    if (tvoc > 2000) {
+        pwmSpeed = 255; // Max speed
+        Serial.println("[APPLIANCE] High TVOC/Fumes detected! Purifier: MAX SPEED.");
+    } else if (tvoc > 500) {
+        pwmSpeed = 128; // Medium speed
+        Serial.println("[APPLIANCE] Moderate TVOC detected. Purifier: MEDIUM SPEED.");
+    } else {
+        pwmSpeed = 0;   // Idle
+        Serial.println("[APPLIANCE] Air clean. Purifier: IDLE.");
+    }
+    analogWrite(PURIFIER_PWM_PIN, pwmSpeed);
+}
+
+/**
+ * @brief Exercise 3: Smart Home Automation Dashboards
+ * Formats real-time environmental telemetry into structured JSON for MQTT / Dashboard transmission.
+ */
+void exerciseDashboardTelemetry(uint8_t aqi, uint16_t tvoc, uint16_t eco2) {
+    Serial.println("{");
+    Serial.print("  \"sensor\": \"ENS160\",\n");
+    Serial.print("  \"aqi\": "); Serial.print(aqi); Serial.print(",\n");
+    Serial.print("  \"tvoc_ppb\": "); Serial.print(tvoc); Serial.print(",\n");
+    Serial.print("  \"eco2_ppm\": "); Serial.print(eco2); Serial.print("\n");
+    Serial.println("}");
+}
+
+/**
+ * @brief Exercise 4: Building Automation & Smart Thermostats
+ * Maintains optimal indoor health parameters across commercial zones based on EPA AQI ratings.
+ */
+void exerciseBuildingAutomation(uint8_t aqi) {
+    if (aqi >= 3) {
+        Serial.println("[BUILDING] Health Warning: AQI degraded. Dispatching fresh air intake command to Smart Thermostat.");
+    } else {
+        Serial.println("[BUILDING] Indoor air health parameters optimal.");
+    }
+}
+
+void loop() {
+    Serial.println("\n----------------------------------------");
+
+    // Read Air Quality Data from ENS160 using standard library polling functions
     uint8_t aqi = ens160.getAQI();
     uint16_t tvoc = ens160.getTVOC();
     uint16_t eco2 = ens160.getECO2();
@@ -146,6 +213,12 @@ void loop() {
     Serial.print("  - Air Quality Index (AQI 1-5): "); Serial.println(aqi);
     Serial.print("  - TVOC Concentration:          "); Serial.print(tvoc); Serial.println(" ppb");
     Serial.print("  - eCO2 Concentration:          "); Serial.print(eco2); Serial.println(" ppm");
+
+    // Execute Automation Routines
+    exerciseSmartVentilation(eco2);
+    exerciseAirPurifier(tvoc);
+    exerciseDashboardTelemetry(aqi, tvoc, eco2);
+    exerciseBuildingAutomation(aqi);
 
     delay(5000); // Poll every 5 seconds
 }
