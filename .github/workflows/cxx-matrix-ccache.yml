@@ -1,0 +1,90 @@
+# ==============================================================================
+# File: cxx-matrix-ccache.yml
+# Workflow: C/C++ Build & Test Matrix with ccache
+# Version: 1.0.0
+# Last Updated: 2026-07-30
+# Purpose: Compiles and tests a C/C++ project across Linux/macOS and GCC/Clang,
+#          leveraging ccache to eliminate redundant compiler steps.
+# Triggers:
+#   - Pushes to main branch
+#   - Pull requests targeting main branch
+# ==============================================================================
+
+name: C/C++ Matrix (ccache)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+      - '.github/workflows/cxx-matrix-ccache.yml' # Keep workflow changes monitored
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'src/**'
+      - 'include/**'
+      - 'CMakeLists.txt'
+      - '**/CMakeLists.txt'
+      - '.github/workflows/cxx-matrix-ccache.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }}, ${{ matrix.compiler }})
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        compiler: [gcc, clang]
+
+    steps:
+      # Step 1: Check out repository source code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Step 2: Configure ccache & restore cache matching OS + Compiler
+      # The action automatically exposes CCACHE_DIR and registers compiler wrappers
+      - name: Setup ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: ${{ matrix.os }}-${{ matrix.compiler }}
+          max-size: 500M
+
+      # Step 3: Configure build tools and compiler choice
+      - name: Set Compiler Environment
+        run: |
+          if [ "${{ matrix.compiler }}" = "gcc" ]; then
+            echo "CC=gcc" >> $GITHUB_ENV
+            echo "CXX=g++" >> $GITHUB_ENV
+          else
+            echo "CC=clang" >> $GITHUB_ENV
+            echo "CXX=clang++" >> $GITHUB_ENV
+          fi
+
+      # Step 4: Generate build system using CMake with ccache launcher
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+
+      # Step 5: Build project using cached objects
+      - name: Build Project
+        run: cmake --build build --config Release -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+
+      # Step 6: Execute tests using CTest
+      - name: Run Tests
+        run: ctest --test-dir build --output-on-failure
+
+      # Step 7: Output ccache performance metrics into the job log
+      - name: Print ccache Statistics
+        run: ccache -s
