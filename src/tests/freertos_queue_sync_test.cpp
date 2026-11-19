@@ -41,7 +41,7 @@
  *
  * @section user_interface_guide User Interface Guide
  * - Launch the monitor utility using `pio run -e freertos_queue_test_c6 -t upload -t monitor`.
- * - Observe real-time serial output packets detailing message transmission, receipt counts, and telemetry timestamps.
+ * - Observe real-time serial output packets detailing message transmission, receipt counts, and 02_telemetry timestamps.
  *
  * @section error_message_responses Error Message Responses
  * - `[Producer] Queue send failed!`: Indicates that the inter-task queue is full and timed out. Verify task frequency synchronization and queue length bounds.
@@ -49,11 +49,11 @@
  *
  * @section processing_workflow_and_algorithms Processing Workflow and Algorithms
  * 1. Initialize system serial communication at 115200 baud.
- * 2. Create a thread-safe FreeRTOS queue handle capable of storing structured telemetry data payloads.
+ * 2. Create a thread-safe FreeRTOS queue handle capable of storing structured 02_telemetry data payloads.
  * 3. Spawn producer and consumer tasks pinned to available system execution cores.
  * 4. The producer task generates sequential message packets containing timestamps and counters, pushing them into the queue.
  * 5. The consumer task blocks safely on the queue, retrieving payloads immediately upon arrival without polling overhead.
- * 6. Stream telemetry status and verification counters over the serial interface.
+ * 6. Stream 02_telemetry status and verification counters over the serial interface.
  *
  * @section references_and_notes References and Notes
  * - FreeRTOS Real-Time Kernel Documentation & Inter-Task Communication (Queues).
@@ -108,7 +108,7 @@ void setup() {
   telemetryQueue = xQueueCreate(5, sizeof(SensorDataMessage));
 
   if (telemetryQueue == NULL) {
-    Serial.println("[Init] Failed to create telemetry queue!");
+    Serial.println("[Init] Failed to create 02_telemetry queue!");
     return;
   }
 

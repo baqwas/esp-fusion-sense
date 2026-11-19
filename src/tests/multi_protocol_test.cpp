@@ -15,14 +15,14 @@
  *                endpoint, and 802.15.4 packet sniffer for verification.
  * User Interface Guidance: Monitor serial output via idf.py monitor set to 115200 baud.
  *                          Operational status is indicated by discrete heartbeat LEDs and
- *                          telemetry publish confirmations.
+ *                          02_telemetry publish confirmations.
  * Error Message Responses:
  *   - [ERR_WIFI_DISCONNECT]: AP link lost. Executing exponential backoff retry.
  *   - [ERR_BLE_STACK_BUSY]: Controller buffer exhausted. Dropping non-critical advertisement frame.
  *   - [ERR_RADIO_COLLISION]: Arbitration fault detected on shared MAC layer.
  * Processing Workflow & Algorithms:
  *   1. Initialize the Wi-Fi station interface and establish an authenticated MQTT session.
- *   2. Start the NimBLE stack to broadcast background telemetry advertisements.
+ *   2. Start the NimBLE stack to broadcast background 02_telemetry advertisements.
  *   3. Spin up an IEEE 802.15.4 OpenThread stack task to dispatch periodic mesh heartbeat packets.
  *   4. Run concurrent threads executing non-blocking polling loops while monitoring heap
  *      allocation health and task watchdog timers.

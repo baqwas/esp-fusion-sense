@@ -75,7 +75,7 @@
  * @page doc_workflow 5. Processing Workflow & Algorithms
  * @workflow
  * 1. Initialization Phase (`setup()`):
- *    - Opens serial telemetry at 115,200 baud.
+ *    - Opens serial 02_telemetry at 115,200 baud.
  *    - Initializes the `Wire` library explicitly assigning GPIO 6 (SDA) and GPIO 7 (SCL).
  *    - Sets standard I2C clock frequency to 100kHz.
  * 2. Execution Loop (`loop()`):
@@ -169,7 +169,7 @@
  * @page doc_workflow 5. Processing Workflow & Algorithms
  * @workflow
  * 1. Initialization Phase (`setup()`):
- *    - Opens serial telemetry at 115,200 baud.
+ *    - Opens serial 02_telemetry at 115,200 baud.
  *    - Initializes the `Wire` library explicitly assigning GPIO 19 (SDA) and GPIO 20 (SCL).
  *    - Sets standard I2C clock frequency to 100kHz.
  * 2. Execution Loop (`loop()`):

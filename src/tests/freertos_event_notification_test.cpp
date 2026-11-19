@@ -54,7 +54,7 @@
  * 3. Spawn a signaling producer task and a synchronized handler worker task.
  * 4. The signaling task sequentially sets specific bit flags in the event group and issues direct task notifications.
  * 5. The handler task blocks safely, waiting for multiple event bits to clear or for direct task notifications to arrive.
- * 6. Stream telemetry status and verification counters over the serial interface.
+ * 6. Stream 02_telemetry status and verification counters over the serial interface.
  *
  * @section references_and_notes References and Notes
  * - FreeRTOS Real-Time Kernel Documentation & Event Groups / Task Notifications Architecture.

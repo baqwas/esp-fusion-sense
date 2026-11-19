@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @brief Advanced ESP32-C6 Firmware integration and multi-sensor telemetry processing suite for DFRobot C4002, ENS160, and BME280 peripherals.
+ * @brief Advanced ESP32-C6 Firmware integration and multi-sensor 02_telemetry processing suite for DFRobot C4002, ENS160, and BME280 peripherals.
  * @author Reza
  * @version 1.2.2
  * @date 2026-07-27
@@ -39,7 +39,7 @@
  *   - Configuration: Local `secrets.h` header file providing `WIFI_SSID` and `WIFI_PASSWORD` macros (dynamically injected during CI/CD execution via GitHub Secrets).
  *
  * @user_interface_guide
- *   - Serial Console: Operational messages, telemetry data, and hardware diagnostic statuses are output via UART0 at 115200 baud (8 data bits, no parity, 1 stop bit).
+ *   - Serial Console: Operational messages, 02_telemetry data, and hardware diagnostic statuses are output via UART0 at 115200 baud (8 data bits, no parity, 1 stop bit).
  *   - Monitoring: Real-time target state and presence distance values stream continuously at a default interval of 500ms.
  *
  * @error_messages_responses
@@ -54,7 +54,7 @@
  *      - Execute `c4002.getNoteInfo()` to service the incoming packet buffer.
  *      - Retrieve target detection state via `c4002.getTargetState()`.
  *      - Extract stationary presence details (distance, energy) via `c4002.getPresenceTargetInfo()`.
- *      - Output formatted telemetry strings over primary debugging UART.
+ *      - Output formatted 02_telemetry strings over primary debugging UART.
  *      - Enforce a static 500ms delay between sampling cycles.
  *
  * @references
@@ -115,7 +115,7 @@ void loop() {
     sRetResult_t retResult = c4002.getNoteInfo();
     (void)retResult;
 
-    // Retrieve target state and presence telemetry
+    // Retrieve target state and presence 02_telemetry
     eTargetState_t targetState = c4002.getTargetState();
     sPresenceTarget_t presenceInfo = c4002.getPresenceTargetInfo();
 

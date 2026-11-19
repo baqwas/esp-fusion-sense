@@ -77,7 +77,7 @@
  * 2. Configuration Phase:
  *    - Push distance constraints via `setDistanceThreshold(0, 3)` to restrict field
  *      of view bounds to 3 meters.
- *    - Set telemetry reporting period to 100ms.
+ *    - Set 02_telemetry reporting period to 100ms.
  *    - Initialize environment noise collection routine to filter background elements.
  * 3. Execution Phase (Main Loop):
  *    - Fetch asynchronous frames utilizing `getAllVendorResult()`.
@@ -122,7 +122,7 @@ void setup() {
   sens.setDistanceThreshold(0, 3);
   Serial.println("Detection range limited to 3 meters.");
 
-  // Configure telemetry report frequency period (ms)
+  // Configure 02_telemetry report frequency period (ms)
   sens.setReportPeriod(100);
 
   // Calibrate baseline environmental noise
@@ -131,7 +131,7 @@ void setup() {
 }
 
 void loop() {
-  // Fetch telemetry results package from the sensor pipeline
+  // Fetch 02_telemetry results package from the sensor pipeline
   sRetResult_t result = sens.getAllVendorResult();
 
   // Validate packet header signature

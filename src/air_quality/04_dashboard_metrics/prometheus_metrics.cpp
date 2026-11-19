@@ -2,13 +2,13 @@
  * @file prometheus_metrics.cpp
  * @brief Module 4: Dashboard Metrics - Exercise 4.2: Prometheus Metrics Exporter
  *
- * @purpose Exposes environmental telemetry in standard Prometheus exposition text format
+ * @purpose Exposes environmental 02_telemetry in standard Prometheus exposition text format
  *          via an embedded HTTP endpoint, allowing automated SOHO cluster scraping and monitoring.
  *
  * @version 1.0.1
  * @update_history
  *   - 1.0.1 (2026-08-01): Updated to leverage credentials from secrets.h.
- *   - 1.0.0 (2026-08-01): Initial release introducing Prometheus text-format telemetry exporter.
+ *   - 1.0.0 (2026-08-01): Initial release introducing Prometheus text-format 02_telemetry exporter.
  *
  * @author Matha Goram
  * @copyright Copyright (c) 2026 ParkCircus Productions. All Rights Reserved.

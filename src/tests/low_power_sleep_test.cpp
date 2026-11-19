@@ -100,7 +100,7 @@ void setup() {
 
     CHECKPOINT("Setup Completed - Preparing for Deep Sleep Transition");
 
-    // Output telemetry snapshot prior to entering low-power state
+    // Output 02_telemetry snapshot prior to entering low-power state
     uint32_t free_heap = esp_get_free_heap_size();
     Serial.printf("[TELEMETRY] Pre-Sleep Free Heap: %u bytes\n", free_heap);
     Serial.println("[INFO] System entering deep sleep in 3 seconds. Measure current draw now.");

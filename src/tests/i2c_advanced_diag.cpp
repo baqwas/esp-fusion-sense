@@ -72,7 +72,7 @@
  * @page doc_workflow 5. Processing Workflow & Algorithms
  * @workflow
  * 1. Initialization Phase (`setup()`):
- *    - Opens serial telemetry at 115,200 baud.
+ *    - Opens serial 02_telemetry at 115,200 baud.
  *    - Executes a pre-initialization bus recovery algorithm (`recoverI2CBus`) to clear stuck SDA lines.
  *    - Initializes the `Wire` library explicitly on pins 19 (SDA) and 20 (SCL).
  * 2. Execution Phase (`loop()`):

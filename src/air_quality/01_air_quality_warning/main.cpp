@@ -34,7 +34,7 @@
  *   3. Loop: Fetch ambient temperature and humidity from BME280.
  *   4. Feed environmental metrics into ENS160 for real-time compensation.
  *   5. Read eCO2, TVOC, and AQI tier values.
- *   6. Output formatted telemetry dashboard to Serial console every 2000ms.
+ *   6. Output formatted 02_telemetry dashboard to Serial console every 2000ms.
  *
  * @references
  *   - DFRobot ENS160 & BME280 Datasheet and Integration Manuals.

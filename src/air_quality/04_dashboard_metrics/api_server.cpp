@@ -3,13 +3,13 @@
  * @brief Module 4: Dashboard Metrics - Exercise 4.1: Local Web Server & REST API
  *
  * @purpose Implements an embedded HTTP server and REST API endpoint on the ESP32-C6
- *          to expose real-time environmental telemetry (temperature, humidity, TVOC, eCO2, AQI)
+ *          to expose real-time environmental 02_telemetry (temperature, humidity, TVOC, eCO2, AQI)
  *          as structured JSON payloads for local web dashboards and client polling.
  *
  * @version 1.0.1
  * @update_history
  *   - 1.0.1 (2026-08-01): Updated to leverage credentials from secrets.h.[cite: 3]
- *   - 1.0.0 (2026-08-01): Initial release introducing WebServer endpoint routing for JSON telemetry.[cite: 3]
+ *   - 1.0.0 (2026-08-01): Initial release introducing WebServer endpoint routing for JSON 02_telemetry.[cite: 3]
  *
  * @author Matha Goram[cite: 3]
  * @copyright Copyright (c) 2026 ParkCircus Productions. All Rights Reserved.[cite: 3]
@@ -38,7 +38,7 @@
  *   - Network: Active Wi-Fi AP configuration credentials via secrets.h.
  *
  * @user_interface_guide
- *   - Access `http://<node-ip>/api/telemetry` via a local web browser or curl to retrieve JSON sensor metrics.[cite: 3]
+ *   - Access `http://<node-ip>/api/02_telemetry` via a local web browser or curl to retrieve JSON sensor metrics.[cite: 3]
  *
  * @error_messages_responses
  *   - "⚠️ [ERROR] WiFi connection failed": Verify SSID and password configuration.[cite: 3]
@@ -46,7 +46,7 @@
  *
  * @processing_workflow_and_algorithms
  *   1. Connect to local Wi-Fi network and initialize sensor buses (I2C).[cite: 3]
- *   2. Start HTTP server on port 80 and register route handler for `/api/telemetry`.[cite: 3]
+ *   2. Start HTTP server on port 80 and register route handler for `/api/02_telemetry`.[cite: 3]
  *   3. Continuously sample environmental parameters from BME280 and ENS160.[cite: 3]
  *   4. Serve formatted JSON data dynamically upon client HTTP GET requests.[cite: 3]
  *
@@ -117,7 +117,7 @@ void setup() {
     Serial.printf("\n📡 [WIFI] Connected! IP Address: %s\n", WiFi.localIP().toString().c_str());
 
     // Setup HTTP Endpoints
-    server.on("/api/telemetry", HTTP_GET, handleTelemetry);
+    server.on("/api/02_telemetry", HTTP_GET, handleTelemetry);
     server.begin();
     Serial.println("🚀 [HTTP] REST API Server started on port 80.");
 }

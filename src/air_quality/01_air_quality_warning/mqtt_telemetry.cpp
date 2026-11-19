@@ -44,7 +44,7 @@
  * @user_interface_guide
  *   - Serial Monitor (115200 baud) logs Wi-Fi connection status, retry sequences, MQTT broker session states,
  *     and published JSON payloads.
- *   - External MQTT clients can subscribe to `telemetry/air_quality/+/warnings` to monitor the fleet.
+ *   - External MQTT clients can subscribe to `02_telemetry/air_quality/+/warnings` to monitor the fleet.
  *
  * @error_messages_responses
  *   - "⚠️ [WIFI] Attempt failed. Retrying...": Indicates an interim connection timeout; will disconnect and re-attempt.
@@ -57,7 +57,7 @@
  *   2. Network Provisioning: Establish a resilient 802.11 b/g/n Wi-Fi connection with bounded retries and session teardown recovery.
  *   3. MQTT Session Management: Connect and authenticate to the broker using the `DEVICE_ID` compiler build flag as the unique client identifier.
  *   4. Asynchronous Polling: Enter an idle state until the ENS160 hardware interrupt fires.
- *   5. Data Evaluation: Fetch sensor telemetry and evaluate against the AQI threshold (>= 4).
+ *   5. Data Evaluation: Fetch sensor 02_telemetry and evaluate against the AQI threshold (>= 4).
  *   6. Payload Serialization: If the threshold is crossed, serialize the data into a JSON string.
  *   7. Telemetry Broadcast: Publish the JSON payload to the broker and return to idle.
  *
@@ -161,7 +161,7 @@ void setup() {
     Serial.println("\n🌐 [INIT] Initializing Networked AQI Telemetry Node...");
 
     // Construct dynamic MQTT topics based on compiler flag
-    snprintf(pub_topic_warning, sizeof(pub_topic_warning), "ha/telemetry/air_quality/%s/warnings", DEVICE_ID);
+    snprintf(pub_topic_warning, sizeof(pub_topic_warning), "ha/02_telemetry/air_quality/%s/warnings", DEVICE_ID);
 
     // Initialize Network & Broker
     setup_wifi();
@@ -236,7 +236,7 @@ void loop() {
                 DEVICE_ID, aqi, eco2, tvoc, temp, humidity, pressure);
 
             // 5. Broadcast to MQTT Broker
-            Serial.println("\n🚨 [WARNING] THRESHOLD VIOLATION! Broadcasting telemetry...");
+            Serial.println("\n🚨 [WARNING] THRESHOLD VIOLATION! Broadcasting 02_telemetry...");
             Serial.printf("📤 Topic: %s\n", pub_topic_warning);
             Serial.printf("📦 Payload: %s\n", json_payload);
 

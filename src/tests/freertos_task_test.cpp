@@ -49,11 +49,11 @@
  * - `[Task 2] Allocation failed!`: Indicates that the system heap is exhausted or severely fragmented. Verify memory task stack allocation bounds and block sizing parameters.
  *
  * @section processing_workflow_and_algorithms Processing Workflow and Algorithms
- * 1. Initialize the system serial telemetry interface at 115200 baud.
+ * 1. Initialize the system serial 02_telemetry interface at 115200 baud.
  * 2. Spawn a dedicated low-priority background FreeRTOS worker task pinned to available system cores.
  * 3. Inside the worker routine, execute a periodic loop allocating a fixed 1024-byte block using standard `malloc`.
  * 4. Populate the allocated buffer with byte-pattern markers (`0xAA`) to force physical memory writes.
- * 5. Log the instantaneous free heap status via serial telemetry, then instantly release the memory block using `free`.
+ * 5. Log the instantaneous free heap status via serial 02_telemetry, then instantly release the memory block using `free`.
  * 6. Introduce a structured task delay via `vTaskDelay` to yield execution back to the idle and main application loops.
  *
  * @section references_and_notes References and Notes

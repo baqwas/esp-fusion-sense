@@ -3,7 +3,7 @@
  * @brief Module 2: HVAC Relay Control - Exercise 2.3: Failsafes and Watchdog Timers
  *
  * @purpose Implements industrial-grade hardware watchdog timers (ESP32 TWDT) and network heartbeat
- *          failsafes. Automatically disengages HVAC relay contacts if telemetry heartbeats drop
+ *          failsafes. Automatically disengages HVAC relay contacts if 02_telemetry heartbeats drop
  *          or application threads freeze.
  *
  * @version 1.0.0

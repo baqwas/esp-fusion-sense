@@ -4,7 +4,7 @@
  *
  * @details
  * Combines multi-core task scheduling validation with active runtime heap allocation and release cycles.
- * Monitors core affinity, task distribution, uptime telemetry, and dynamic memory reclamation without
+ * Monitors core affinity, task distribution, uptime 02_telemetry, and dynamic memory reclamation without
  * external peripheral dependencies.
  *
  * @copyright Copyright (c) 2026 Reza. All rights reserved.
@@ -41,7 +41,7 @@
  *
  * @section user_interface_guide User Interface Guide
  * - Launch the monitor utility using `pio run -e freertos_unified_test_c6 -t upload -t monitor`.
- * - Observe core execution markers, heap allocation sizes, and system uptime telemetry.
+ * - Observe core execution markers, heap allocation sizes, and system uptime 02_telemetry.
  *
  * @section error_message_responses Error Message Responses
  * - `[WorkerTask] Allocation failed!`: Indicates system heap exhaustion or fragmentation.

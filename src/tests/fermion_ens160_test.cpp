@@ -41,12 +41,12 @@
 
 /**
  * @page doc_overview 1. Purpose & System Scope
- * @brief Validates I2C connectivity, air quality data acquisition, and IoT automation exercises for the DFRobot Fermion ENS160 sensor module.
+ * @brief Validates I2C 01_connectivity, air quality data acquisition, and IoT automation exercises for the DFRobot Fermion ENS160 sensor module.
  *
  * The `fermion_ens160_test.cpp` module initializes the air quality sensor
  * connected to the FireBeetle 2 ESP32-C6. It verifies I2C bus communication,
  * reads raw metrics (TVOC, eCO2, AQI), and executes integrated automation routines
- * for HVAC ventilation, air purifiers, JSON telemetry dashboards, and building automation.
+ * for HVAC ventilation, air purifiers, JSON 02_telemetry dashboards, and building automation.
  */
 
 /**
@@ -69,7 +69,7 @@
 /**
  * @page doc_ui 4. User Interface & Telemetry Guide
  * @ui
- * - Serial Telemetry: Streams initialization logs, discrete automation triggers, and structured JSON telemetry packets over UART0 at 115200 baud, 8-N-1.
+ * - Serial Telemetry: Streams initialization logs, discrete automation triggers, and structured JSON 02_telemetry packets over UART0 at 115200 baud, 8-N-1.
  * - Diagnostic Metrics: Prints real-time AQI, TVOC concentration, and eCO2 concentration.
  */
 
@@ -178,7 +178,7 @@ void exerciseAirPurifier(uint16_t tvoc) {
 
 /**
  * @brief Exercise 3: Smart Home Automation Dashboards
- * Formats real-time environmental telemetry into structured JSON for MQTT / Dashboard transmission.
+ * Formats real-time environmental 02_telemetry into structured JSON for MQTT / Dashboard transmission.
  */
 void exerciseDashboardTelemetry(uint8_t aqi, uint16_t tvoc, uint16_t eco2) {
     Serial.println("{");

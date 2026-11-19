@@ -53,7 +53,7 @@
  * 2. Create a FreeRTOS Mutex handle for thread-safe access control over shared output streams.
  * 3. Create a FreeRTOS software timer configured for periodic auto-reload execution.
  * 4. Spawn multiple concurrent worker tasks that compete for the shared mutex lock.
- * 5. Inside the critical section protected by the mutex, tasks safely write telemetry data.
+ * 5. Inside the critical section protected by the mutex, tasks safely write 02_telemetry data.
  * 6. The software timer triggers its callback function independently at fixed intervals, logging daemon execution ticks.
  *
  * @section references_and_notes References and Notes

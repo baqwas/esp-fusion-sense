@@ -1,7 +1,7 @@
 /**
  * @file blink_test.cpp
  * @brief High-reliability embedded diagnostic suite for hardware peripheral and bus validation.
- * @details Orchestrates synchronous GPIO state transitions and asynchronous telemetry streaming
+ * @details Orchestrates synchronous GPIO state transitions and asynchronous 02_telemetry streaming
  *          over the native USB-CDC UART interface. Validates system clock stability, execution
  *          pacing, framework task scheduling, and physical bus integrity on target microcontrollers.
  *
@@ -31,12 +31,12 @@
  * SOFTWARE.
  *
  * @section update_history Update History
- * - v1.0.0 (2026-07-24): Initial implementation of high-reliability GPIO validation and telemetry stream.
+ * - v1.0.0 (2026-07-24): Initial implementation of high-reliability GPIO validation and 02_telemetry stream.
  *
  * @section prerequisites Prerequisites
  * - PlatformIO Core / Build Environment configured for target hardware.
  * - Hardware target featuring an accessible status LED mapped via `LED_BUILTIN` or fallback GPIO 15.
- * - USB-CDC serial interface connection for telemetry monitoring at 115200 baud.
+ * - USB-CDC serial interface connection for 02_telemetry monitoring at 115200 baud.
  *
  * @section user_interface_guide User Interface Guide
  * - Telemetry output is streamed continuously over the serial monitor at 115200 baud.
@@ -46,7 +46,7 @@
  *
  * @section error_messages Error Message Responses
  * - None natively thrown by application logic; hardware bus lockups or serial desynchronization
- *   manifest as halted telemetry output or baud rate framing mismatches on the host terminal.
+ *   manifest as halted 02_telemetry output or baud rate framing mismatches on the host terminal.
  *
  * @section processing_workflow Processing Workflow & Algorithms
  * 1. **Initialization Phase (`setup`)**:
@@ -54,9 +54,9 @@
  *    - Enforces a 1000ms hardware stabilization delay for voltage rail settling.
  *    - Configures the target status GPIO pin as a digital output driver.
  * 2. **Execution Phase (`loop`)**:
- *    - Asserts high logic level on the status GPIO pin and emits a telemetry timestamp string.
+ *    - Asserts high logic level on the status GPIO pin and emits a 02_telemetry timestamp string.
  *    - Blocks for 1000ms using system timing primitives.
- *    - Asserts low logic level on the status GPIO pin and emits a corresponding telemetry string.
+ *    - Asserts low logic level on the status GPIO pin and emits a corresponding 02_telemetry string.
  *    - Blocks for an additional 1000ms before recycling the operational loop.
  *
  * @section references References & Notes
@@ -98,7 +98,7 @@ void setup() {
  * @brief Main non-blocking operational execution cycle.
  *
  * Alternates the target GPIO line between high-impedance drive and ground reference states,
- * injecting synchronized state transition markers into the serial telemetry stream
+ * injecting synchronized state transition markers into the serial 02_telemetry stream
  * to verify real-time loop timing and peripheral register responsiveness.
  *
  * @return void

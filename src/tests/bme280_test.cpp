@@ -41,7 +41,7 @@
 
 /**
  * @page doc_overview 1. Purpose & System Scope
- * @brief Validates I2C connectivity and environmental data acquisition for the DFRobot BME280 sensor module.
+ * @brief Validates I2C 01_connectivity and environmental data acquisition for the DFRobot BME280 sensor module.
  *
  * The `bme280_test.cpp` module initializes the meteorological sensor
  * connected to the FireBeetle 2 ESP32-C6. It verifies I2C
@@ -83,7 +83,7 @@
  *    - Verifies BME280 sensor presence at address 0x76 and configures baseline parameters.
  * 2. Execution Loop (`loop()`):
  *    - Measures ambient temperature, humidity, and barometric pressure from the BME280.
- *    - Outputs consolidated telemetry packet to the serial monitor.
+ *    - Outputs consolidated 02_telemetry packet to the serial monitor.
  *    - Pauses execution for 5000 milliseconds before subsequent read cycle.
  */
 

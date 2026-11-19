@@ -45,7 +45,7 @@
  *
  * @section ui_guide User Interface Guide
  * Headless operational model communicating over native USB-Serial/JTAG (`/dev/ttyACM0` or equivalent)
- * at 115200 baud, 8-N-1 configuration. Operational states, telemetry logs, and dispatched actions
+ * at 115200 baud, 8-N-1 configuration. Operational states, 02_telemetry logs, and dispatched actions
  * are streamed directly to standard output. Build targets can be toggled via the `USE_MOCK_SENSOR` macro.
  *
  * @section error_responses Error Messages & Responses
@@ -220,11 +220,11 @@ void loop() {
     sRetResult_t retResult = c4002.getNoteInfo();
     (void)retResult; // Cast to void to suppress unused variable warnings
 
-    // 2. Extract telemetry
+    // 2. Extract 02_telemetry
     eTargetState_t targetState = c4002.getTargetState();
     sPresenceTarget_t presenceInfo = c4002.getPresenceTargetInfo();
 
-    // 3. Pass telemetry to the Rules Engine
+    // 3. Pass 02_telemetry to the Rules Engine
     evaluateEnvironmentAndAct(targetState, presenceInfo);
 
     // 4. Stagger evaluation cycles
@@ -235,14 +235,14 @@ void loop() {
 // Rules-Based Decision Engine
 // -------------------------------------------------------------------------
 /**
- * @brief Evaluates radar telemetry against defined environmental rules and dispatches commands.
+ * @brief Evaluates radar 02_telemetry against defined environmental rules and dispatches commands.
  *
  * @param state The current macro state of the target (Absent, Present, Moving).
  * @param presence Struct containing distance (m) and energy (0-100) metrics.
  */
 void evaluateEnvironmentAndAct(eTargetState_t state, sPresenceTarget_t presence) {
 
-    // Log the raw telemetry for baseline monitoring
+    // Log the raw 02_telemetry for baseline monitoring
     Serial.printf("[TELEMETRY] State: %d | Distance: %.2fm | Energy: %d \n",
                   static_cast<int>(state), presence.distance, presence.energy);
 

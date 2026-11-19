@@ -24,7 +24,7 @@
  *   1. Initialize I2C and SPI interfaces at maximum supported clock speeds with strict timeout wrappers.
  *   2. Execute continuous high-frequency polling loops while monitoring heap fragmentation and buffer health.
  *   3. Implement bus fault recovery routines to re-initialize peripheral controllers upon lockup detection.
- *   4. Output real-time performance telemetry and error counters to the serial console.
+ *   4. Output real-time performance 02_telemetry and error counters to the serial console.
  * References & Notes: Espressif Systems ESP32-C6 Technical Reference Manual - I2C/SPI Master Controllers & DMA Subsystem.
  */
 
@@ -123,7 +123,7 @@ void loop() {
         recover_i2c_bus();
     }
 
-    // Periodic telemetry and heap fragmentation check
+    // Periodic 02_telemetry and heap fragmentation check
     if (total_polls % 100 == 0) {
         uint32_t free_heap = esp_get_free_heap_size();
         uint32_t min_free_heap = esp_get_minimum_free_heap_size();

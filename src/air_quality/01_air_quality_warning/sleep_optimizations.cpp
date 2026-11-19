@@ -9,7 +9,7 @@
  *
  * @version 1.0.0
  * @update_history
- *   - 1.0.0 (2026-08-01): Initial release adding deep sleep cycles, RTC state tracking, and conditional Wi-Fi telemetry.
+ *   - 1.0.0 (2026-08-01): Initial release adding deep sleep cycles, RTC state tracking, and conditional Wi-Fi 02_telemetry.
  *
  * @author Matha Goram
  * @copyright Copyright (c) 2026 ParkCircus Productions. All Rights Reserved.
@@ -41,7 +41,7 @@
  *
  * @user_interface_guide
  *   - Serial Monitor (115200 baud) logs wake reasons, sensor evaluations, deep sleep transitions, and MQTT payload transmissions.
- *   - External MQTT clients can subscribe to `telemetry/air_quality/+/warnings` to monitor remote battery nodes.
+ *   - External MQTT clients can subscribe to `02_telemetry/air_quality/+/warnings` to monitor remote battery nodes.
  *
  * @error_messages_responses
  *   - "⚠️ [WIFI] Connection failed. Resetting session...": Interim association timeout; executing teardown and retry.
@@ -149,7 +149,7 @@ void setup() {
     Serial.printf("\n🌐 [WAKE] System boot count: %d\n", bootCount);
 
     // Construct dynamic MQTT topics based on compiler flag
-    snprintf(pub_topic_warning, sizeof(pub_topic_warning), "telemetry/air_quality/%s/warnings", DEVICE_ID);
+    snprintf(pub_topic_warning, sizeof(pub_topic_warning), "02_telemetry/air_quality/%s/warnings", DEVICE_ID);
 
     // Initialize I2C Bus
     Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
